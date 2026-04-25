@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Bhimavaram Aqua</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex">
+        <div class="h-20 flex items-center px-6 border-b border-slate-800">
+            <span class="font-extrabold text-xl tracking-tight">Admin<span class="text-blue-500">Panel</span></span>
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2">
+            <a href="#" class="block px-4 py-3 bg-blue-600 rounded-xl font-bold text-sm">Inventory Manager</a>
+            <a href="#" class="block px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl font-bold text-sm transition-colors">Order History</a>
+            <a href="store.html" class="block px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl font-bold text-sm transition-colors">View Live Store</a>
+        </nav>
+        <div class="p-4 border-t border-slate-800">
+            <button class="w-full px-4 py-2 text-sm font-bold text-slate-400 hover:text-white text-left">Logout</button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-y-auto">
+        <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8">
+            <h2 class="text-2xl font-bold text-slate-800">Manage Products</h2>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold">HA</div>
+            </div>
+        </header>
+
+        <div class="p-8">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Total Items</p>
+                    <p class="text-3xl font-black text-slate-800">2</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                <div class="xl:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
+                    <h3 class="text-lg font-bold text-slate-900 mb-6 border-b border-slate-100 pb-4">Add New Harvest</h3>
+                    
+                    <form id="add-product-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Product Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="e.g. Pangasius (Basa)" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Description</label>
+                            <textarea id="description" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Brief details about the harvest..." required></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Price per Kg ($)</label>
+                            <input type="number" id="price" step="0.01" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="e.g. 8" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Stock Quantity (Kg)</label>
+                            <input type="number" id="stock" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="e.g. 500" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Image URL</label>
+                            <input type="text" id="image_url" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="https://..." required>
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors mt-4">Publish Product</button>
+                    </form>
+                </div>
+
+                <div class="xl:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100">
+                        <h3 class="text-lg font-bold text-slate-900">Current Inventory</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 text-sm">
+                                    <th class="p-4 font-bold border-b border-slate-200">Product</th>
+                                    <th class="p-4 font-bold border-b border-slate-200">Price</th>
+                                    <th class="p-4 font-bold border-b border-slate-200">Stock</th>
+                                    <th class="p-4 font-bold border-b border-slate-200 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr class="border-b border-slate-100 hover:bg-slate-50">
+                                    <td class="p-4 font-bold text-slate-800">L. Vannamei Shrimp</td>
+                                    <td class="p-4 text-slate-600">$12/kg</td>
+                                    <td class="p-4 text-green-600 font-bold">In Stock</td>
+                                    <td class="p-4 text-right">
+                                        <button class="text-blue-600 hover:text-blue-800 font-bold mr-3">Edit</button>
+                                        <button class="text-red-600 hover:text-red-800 font-bold">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-4 font-bold text-slate-800">Premium Rohu (Carp)</td>
+                                    <td class="p-4 text-slate-600">$5/kg</td>
+                                    <td class="p-4 text-green-600 font-bold">In Stock</td>
+                                    <td class="p-4 text-right">
+                                        <button class="text-blue-600 hover:text-blue-800 font-bold mr-3">Edit</button>
+                                        <button class="text-red-600 hover:text-red-800 font-bold">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Stop the page from refreshing
+
+            // 1. Gather the data from the form inputs
+            const newProduct = {
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                price: parseFloat(document.getElementById('price').value),
+                stock: parseInt(document.getElementById('stock').value),
+                image_url: document.getElementById('image_url').value
+            };
+
+            try {
+                // 2. Send the data to your Node.js backend
+                const response = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newProduct)
+                });
+
+                // 3. Check if the database accepted it
+                if (response.ok) {
+                    alert('✅ Harvest published to the live database successfully!');
+                    document.getElementById('add-product-form').reset(); // Clear the form for the next entry
+                } else {
+                    alert('❌ Server rejected the product. Check your inputs.');
+                }
+            } catch (error) {
+                console.error('API Error:', error);
+                alert('❌ Failed to connect to the backend server.');
+            }
+        });
+    </script>
+</body>
+</html>

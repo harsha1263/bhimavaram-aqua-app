@@ -1,0 +1,25 @@
+/* public/styles.css */
+
+/* Ultra-smooth, graceful floating animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+}
+
+@keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Using cubic-bezier for a natural, flowing ease */
+.animate-float { 
+    animation: float 7s cubic-bezier(0.4, 0, 0.2, 1) infinite; 
+}
+
+.animate-float-delayed { 
+    animation: float 7s cubic-bezier(0.4, 0, 0.2, 1) 3.5s infinite; 
+}
+
+.animate-fade-in-up { 
+    animation: fade-in-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+}
