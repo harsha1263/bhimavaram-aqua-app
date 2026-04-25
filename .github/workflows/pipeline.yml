@@ -73,10 +73,15 @@ jobs:
         run: |
           aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name aqua-cluster
           echo "updated kube config"
-      - name: Deploy to EKS
+      - name: Update Image Tag and Deploy
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }} # This won't work in a separate job; use the full URI
+          IMAGE_TAG: ${{ github.sha }}
         run: |
+          sed -i "s|image:.*|image: 720546261973.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }}|g" k8s/deployment.yml
           kubectl apply -f k8s/
-          echo "✅ Deployment manifest applied to the cluster!"
+          echo "✅ Cluster updated with image version: ${{ github.sha }}"
+
       
 
   
