@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aqua-website-deployment
+  labels:
+    app: aqua-website
+spec:
+  replicas: 2 # Industry standard for high availability
+  selector:
+    matchLabels:
+      app: aqua-website
+  template:
+    metadata:
+      labels:
+        app: aqua-website
+    spec:
+      containers:
+      - name: aqua-website-container
+        # REPLACE the line below with your actual ECR URI we grabbed earlier!
+        image: 720546261973.dkr.ecr.ap-south-1.amazonaws.com/bhimavaram-aqua:latest
+        ports:
+        - containerPort: 8080 # Matches the port in your Dockerfile and server.js

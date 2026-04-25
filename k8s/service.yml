@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aqua-website-service
+spec:
+  type: LoadBalancer    # Industry standard for creating a public-facing URL in AWS
+  selector:
+    app: aqua-website   # CRITICAL: This must match the label in your deployment.yml
+  ports:
+    - protocol: TCP
+      port: 80          # The port the public will use to visit your site
+      targetPort: 8080  # The internal port your Node.js server is listening on
