@@ -28,6 +28,17 @@ jobs:
       - name: pull done
         run:
           echo "pull is successfull"
+       # cache block     
+      - name: Cache Node.js modules
+        uses: actions/cache@v4
+        with:
+          # This is the path to your local npm cache
+          path: ~/.npm
+          # This creates a unique key based on your package-lock.json
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          # If the key doesn't match perfectly, it looks for older versions
+          restore-keys: |
+            ${{ runner.os }}-node-
       #Now that your runner has pulled the code, it needs permission to talk to your AWS account. We never type passwords directly into this file. Instead, we use the Secrets you stored in GitHub.
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -81,7 +92,7 @@ jobs:
           sed -i "s|image:.*|image: 720546261973.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }}|g" k8s/deployment.yml
           kubectl apply -f k8s/
           echo "✅ Cluster updated with image version: ${{ github.sha }}"
-
+  
       
 
   
