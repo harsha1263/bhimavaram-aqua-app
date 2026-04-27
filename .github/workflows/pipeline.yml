@@ -20,6 +20,8 @@ jobs:
         #os: [ubuntu-latest, windows-latest, macos-latest]
     #runs-on is used to tell on which os the code need to run
     runs-on: ubuntu-latest
+    outputs:
+      ecr_registry: ${{ steps.login-ecr.outputs.registry }}
 
     steps:
       #in steps always first pull the code from github for that we use uses:action/checkout@v4
@@ -86,7 +88,7 @@ jobs:
           echo "updated kube config"
       - name: Update Image Tag and Deploy
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }} # This won't work in a separate job; use the full URI
+          ECR_REGISTRY: ${{ needs.build-and-push.outputs.ecr_registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           sed -i "s|image:.*|image: 720546261973.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }}|g" k8s/deployment.yml
