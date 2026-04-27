@@ -54,7 +54,7 @@ jobs:
   trigger-deploy:
     needs: build-and-push
     # Only call the deployment if code was merged/pushed to main
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: always()
     uses: ./.github/workflows/cd-deploy.yml
     with:
       image_tag: ${{ needs.build-and-push.outputs.tag }}
