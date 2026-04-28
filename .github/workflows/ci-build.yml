@@ -10,13 +10,14 @@ on:
 env:
   AWS_REGION: ap-south-1
   ECR_REPOSITORY: bhimavaram-aqua
+permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read  # This is required for actions/checkout
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write # This is required for requesting the JWT
-      contents: read  # This is required for actions/checkout
+    
     outputs:
       tag: ${{ github.sha }} # Saving this for the CD workflow
     steps:
