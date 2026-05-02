@@ -36,28 +36,30 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::720546261973:role/githubactions # Use your Role ARN
           aws-region: ap-south-1
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and Push
-        run: |
-          # INDUSTRY PRO-TIP: Only push to ECR if we are on the main branch
-          # Pull requests will only test the build
-          if [ "${{ github.event_name }}" == "push" ]; then
-            docker build -t ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:${{ github.sha }} .
-            docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:${{ github.sha }}
-          else
-            echo "Pull Request: Testing build only..."
-            docker build -t test-image .
-          fi
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          # Only push if it's a real merge to main, not a PR test
+          push: ${{ github.event_name == 'push' }}
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          # The Magic Sauce: GitHub Actions Cache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   # THE CONNECTION POINT
   trigger-deploy:
     needs: build-and-push
-    # Only call the deployment if code was merged/pushed to main
-    if: always()
+    # CHANGE: Only run if the build-and-push job was successful AND it's a push to main
+    if: github.event_name == 'push' && success()
     uses: ./.github/workflows/cd-deploy.yml
     with:
       image_tag: ${{ needs.build-and-push.outputs.tag }}
