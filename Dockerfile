@@ -1,23 +1,21 @@
-# 1. Use an official, lightweight Node.js image as the base
-FROM alpine:3.21.3
+# Use the official Node image built on Alpine
+FROM node:22-alpine3.21
 
-# It downloads the latest security patches for the Alpine OS
+# Apply latest security patches to the underlying Alpine OS
 RUN apk update && apk upgrade --no-cache
 
-# 2. Set the working directory inside the container
+# Set the working directory
 WORKDIR /usr/src/app
 
-# 3. Copy the package.json files first (for efficient caching)
+# Copy package files
 COPY package*.json ./
 
-# 4. Install the dependencies (express, mysql2, dotenv)
-RUN npm install
+# Install dependencies
+RUN npm install --production
 
-# 5. Copy all your application code into the container
+# Copy application code
 COPY . .
 
-# 6. Expose the port your server.js uses
 EXPOSE 8080
 
-# 7. The command to start your application
 CMD ["node", "server.js"]
